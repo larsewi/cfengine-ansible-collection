@@ -1,4 +1,4 @@
-# Ansible Collection - vpodzime.cfengine
+# Ansible Collection - cfengine.cfengine
 
 This collection integrates CFEngine into Ansible worflows.
 
@@ -15,7 +15,7 @@ This collection integrates CFEngine into Ansible worflows.
    To install this collection, run the following command:
 
    ```
-   ansible-galaxy collection install https://gitlab.com/vpodzime/cfengine-ansible-collection/uploads/d816302640a0a1a9ea2a775756f88711/vpodzime-cfengine-1.0.0.tar.gz
+   ansible-galaxy collection install https://gitlab.com/Northern.tech/CFEngine/cfengine-ansible-collection/uploads/d816302640a0a1a9ea2a775756f88711/cfengine-cfengine-1.0.0.tar.gz
    ```
 
 2. Use the `cfengine` module
@@ -24,7 +24,7 @@ This collection integrates CFEngine into Ansible worflows.
 
    ```
    - name: Install and bootstrap CFEngine
-     vpodzime.cfengine.cfengine:
+     cfengine.cfengine.cfengine:
        policy_server: hub.example.com
        version: 3.18.1
    ```

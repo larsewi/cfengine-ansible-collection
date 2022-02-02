@@ -3,7 +3,7 @@
 # The namespace of the collection. This can be a company/brand/organization or product namespace under which all
 # content lives. May only contain alphanumeric lowercase characters and underscores. Namespaces cannot start with
 # underscores or numbers and cannot contain consecutive underscores
-namespace: vpodzime
+namespace: cfengine
 
 # The name of the collection. Has the same character restrictions as 'namespace'
 name: cfengine
@@ -41,13 +41,13 @@ tags: ['cfengine']
 dependencies: {}
 
 # The URL of the originating SCM repository
-repository: https://gitlab.com/vpodzime/cfengine-ansible-collection
+repository: https://gitlab.com/Northern.tech/CFEngine/cfengine-ansible-collection
 
 # The URL to any online docs
-documentation: https://gitlab.com/vpodzime/cfengine-ansible-collection
+documentation: https://gitlab.com/Northern.tech/CFEngine/cfengine-ansible-collection
 
 # The URL to the homepage of the collection/project
-homepage: https://gitlab.com/vpodzime/cfengine-ansible-collection
+homepage: https://gitlab.com/Northern.tech/CFEngine/cfengine-ansible-collection
 
 # The URL to the collection issue tracker
-issues: https://gitlab.com/vpodzime/cfengine-ansible-collection/-/issues
+issues: https://gitlab.com/Northern.tech/CFEngine/cfengine-ansible-collection/-/issues

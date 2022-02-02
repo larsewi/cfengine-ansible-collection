@@ -33,7 +33,7 @@ options:
 # Specify this value according to your collection
 # in format of namespace.collection.doc_fragment_name
 # extends_documentation_fragment:
-#     - vpodzime.cfengine.my_doc_fragment_name
+#     - cfengine.cfengine.my_doc_fragment_name
 
 author:
     - Vratislav Podzimek (@vpodzime)
@@ -41,23 +41,23 @@ author:
 
 EXAMPLES = r'''
 - name: Make sure the host is part of the CFEngine-managed infra
-  vpodzime.cfengine.cfengine:
+  cfengine.cfengine.cfengine:
     policy_server: 10.0.0.1
 
 # host name can be used instead of IP
 - name: Make sure the host is part of the CFEngine-managed infra
-  vpodzime.cfengine.cfengine:
+  cfengine.cfengine.cfengine:
     policy_server: hub.example.com
 
 # specific version can be requested (if CFEngine is not installed already)
 - name: Make sure the host is part of the CFEngine-managed infra
-  vpodzime.cfengine.cfengine:
+  cfengine.cfengine.cfengine:
     policy_server: hub.example.com
     version: 3.18.1
 
 # version series can be requested (if CFEngine is not installed already)
 - name: Make sure the host is part of the CFEngine-managed infra
-  vpodzime.cfengine.cfengine:
+  cfengine.cfengine.cfengine:
     policy_server: hub.example.com
     version: 3.18.x
 '''
