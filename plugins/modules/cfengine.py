@@ -577,9 +577,15 @@ def install_cfengine(module, result):
 
 
 def bootstrap(host, module, result):
-    rc, _out, _err = module.run_command("/var/cfengine/bin/cf-agent --bootstrap %s" % host)
+    rc, out, err = module.run_command("/var/cfengine/bin/cf-agent --bootstrap %s" % host)
     if rc != 0:
-        module.fail_json(msg="Failed to bootstrap to %s" % host, **result)
+        result["stdout"] = out
+        result["stderr"] = err
+        reason = err.strip() or out.strip()
+        msg = "Failed to bootstrap to %s" % host
+        if reason:
+            msg += ": %s" % reason
+        module.fail_json(msg=msg, **result)
 
 
 def run_module():
