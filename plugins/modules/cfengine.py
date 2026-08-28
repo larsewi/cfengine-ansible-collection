@@ -78,6 +78,16 @@ state:
     type: str
     returned: if the host has CFEngine installed and is bootstrapped
     sample: 'CFEngine installed and bootstrapped to hub.example.com'
+stdout:
+    description: Standard output of the installation or bootstrap command
+    type: str
+    returned: if the installation or bootstrap command failed
+    sample: "No suitable server found for '/var/cfengine/inputs'"
+stderr:
+    description: Standard error of the installation or bootstrap command
+    type: str
+    returned: if the installation or bootstrap command failed
+    sample: 'dpkg: error processing package cfengine-nova-hub (--install)'
 '''
 
 import os
