@@ -563,7 +563,7 @@ def install_cfengine(module, result):
 
     command_str = " ".join([command, sub_command, fpath])
     log.info("Installing %s with %s" % (url, command_str))
-    rc, _out, _err = module.run_command(command_str)
+    rc, out, err = module.run_command(command_str)
 
     try:
         os.unlink(fpath)
@@ -571,7 +571,13 @@ def install_cfengine(module, result):
         pass
 
     if rc != 0:
-        module.fail_json(msg="Installation of %s failed" % url, **result)
+        result["stdout"] = out
+        result["stderr"] = err
+        reason = err.strip() or out.strip()
+        msg = "Installation of %s failed" % url
+        if reason:
+            msg += ": %s" % reason
+        module.fail_json(msg=msg, **result)
 
     result["changed"] = True
 
