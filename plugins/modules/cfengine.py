@@ -73,6 +73,11 @@ cfengine_role:
     type: str
     returned: always
     sample: 'agent'
+cfengine_package:
+    description: URL of the CFEngine package that was installed
+    type: str
+    returned: if CFEngine was not installed already
+    sample: 'https://cfengine-package-repos.s3.amazonaws.com/enterprise/Enterprise-3.27.1/agent/agent_debian13_x86_64/cfengine-nova_3.27.1-1.debian13_amd64.deb'
 state:
     description: Description of the current state of the host
     type: str
