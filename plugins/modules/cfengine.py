@@ -587,6 +587,8 @@ def bootstrap(host, module, result):
             msg += ": %s" % reason
         module.fail_json(msg=msg, **result)
 
+    result["changed"] = True
+
 
 def run_module():
     # define available arguments/parameters a user can pass to the module
