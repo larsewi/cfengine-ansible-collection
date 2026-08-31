@@ -73,11 +73,26 @@ cfengine_role:
     type: str
     returned: always
     sample: 'agent'
+cfengine_package:
+    description: URL of the CFEngine package that was installed
+    type: str
+    returned: if CFEngine was not installed already
+    sample: 'https://cfengine-package-repos.s3.amazonaws.com/enterprise/Enterprise-3.27.1/agent/agent_debian13_x86_64/cfengine-nova_3.27.1-1.debian13_amd64.deb'
 state:
     description: Description of the current state of the host
     type: str
     returned: if the host has CFEngine installed and is bootstrapped
     sample: 'CFEngine installed and bootstrapped to hub.example.com'
+stdout:
+    description: Standard output of the installation or bootstrap command
+    type: str
+    returned: if the installation or bootstrap command failed
+    sample: "No suitable server found for '/var/cfengine/inputs'"
+stderr:
+    description: Standard error of the installation or bootstrap command
+    type: str
+    returned: if the installation or bootstrap command failed
+    sample: 'dpkg: error processing package cfengine-nova-hub (--install)'
 '''
 
 import os
@@ -563,7 +578,7 @@ def install_cfengine(module, result):
 
     command_str = " ".join([command, sub_command, fpath])
     log.info("Installing %s with %s" % (url, command_str))
-    rc, _out, _err = module.run_command(command_str)
+    rc, out, err = module.run_command(command_str)
 
     try:
         os.unlink(fpath)
@@ -571,15 +586,29 @@ def install_cfengine(module, result):
         pass
 
     if rc != 0:
-        module.fail_json(msg="Installation of %s failed" % url, **result)
+        result["stdout"] = out
+        result["stderr"] = err
+        reason = err.strip() or out.strip()
+        msg = "Installation of %s failed" % url
+        if reason:
+            msg += ": %s" % reason
+        module.fail_json(msg=msg, **result)
 
     result["changed"] = True
 
 
 def bootstrap(host, module, result):
-    rc, _out, _err = module.run_command("/var/cfengine/bin/cf-agent --bootstrap %s" % host)
+    rc, out, err = module.run_command("/var/cfengine/bin/cf-agent --bootstrap %s" % host)
     if rc != 0:
-        module.fail_json(msg="Failed to bootstrap to %s" % host, **result)
+        result["stdout"] = out
+        result["stderr"] = err
+        reason = err.strip() or out.strip()
+        msg = "Failed to bootstrap to %s" % host
+        if reason:
+            msg += ": %s" % reason
+        module.fail_json(msg=msg, **result)
+
+    result["changed"] = True
 
 
 def run_module():
