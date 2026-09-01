@@ -38,6 +38,7 @@ options:
         type: str
         default: enterprise
         choices: [ enterprise, community ]
+        version_added: "1.1.0"
 # Specify this value according to your collection
 # in format of namespace.collection.doc_fragment_name
 # extends_documentation_fragment:
