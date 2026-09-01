@@ -57,3 +57,4 @@ issues: https://gitlab.com/Northern.tech/CFEngine/cfengine-ansible-collection/-/
 build_ignore:
 - .github
 - .gitignore
+- RELEASING.md
