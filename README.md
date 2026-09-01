@@ -15,7 +15,7 @@ This collection integrates CFEngine into Ansible worflows.
    To install this collection, run the following command:
 
    ```
-   ansible-galaxy collection install https://gitlab.com/Northern.tech/CFEngine/cfengine-ansible-collection/uploads/71362febba022da55db9db748d7d399f/cfengine-cfengine-1.0.0.tar.gz
+   ansible-galaxy collection install cfengine.cfengine
    ```
 
 2. Use the `cfengine` module
