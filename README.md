@@ -28,3 +28,13 @@ This collection integrates CFEngine into Ansible worflows.
        policy_server: hub.example.com
        version: 3.18.1
    ```
+
+   The Enterprise edition is installed by default. Use the `edition` option to
+   install the Community edition instead:
+
+   ```
+   - name: Install and bootstrap CFEngine Community
+     cfengine.cfengine.cfengine:
+       policy_server: hub.example.com
+       edition: community
+   ```

@@ -30,6 +30,14 @@ options:
           - If CFEngine is installed already, this is ignored.
         required: false
         type: str
+    edition:
+        description:
+          - Edition of CFEngine that should be installed.
+          - If CFEngine is installed already, this is ignored.
+        required: false
+        type: str
+        default: enterprise
+        choices: [ enterprise, community ]
 # Specify this value according to your collection
 # in format of namespace.collection.doc_fragment_name
 # extends_documentation_fragment:
@@ -60,6 +68,12 @@ EXAMPLES = r'''
   cfengine.cfengine.cfengine:
     policy_server: hub.example.com
     version: 3.18.x
+
+# the community edition can be installed instead of the default enterprise one
+- name: Make sure the host is part of the CFEngine-managed infrastructure
+  cfengine.cfengine.cfengine:
+    policy_server: hub.example.com
+    edition: community
 '''
 
 RETURN = r'''
@@ -476,7 +490,8 @@ def get_package_from_host_info(package_tags, pkg_binary, arch, version=None,
 # ======================== END code taken as-is from cf-remote ========================
 
 
-def get_package_url_for_this_host(module, version=None, hub=False):
+def get_package_url_for_this_host(module, version=None, hub=False,
+                                  edition="enterprise"):
     os_release_data = None
     if os.access("/etc/os-release", os.R_OK):
         with open("/etc/os-release") as osr:
@@ -506,7 +521,8 @@ def get_package_url_for_this_host(module, version=None, hub=False):
             pkg_binaries[pkg_binary] = path
 
     package = get_package_from_host_info(package_tags, pkg_binaries, arch,
-                                         version, hub, remote_download=True)
+                                         version, hub, edition,
+                                         remote_download=True)
     return (package, pkg_binaries)
 
 
@@ -531,8 +547,9 @@ def get_cfengine_role(module, result):
 
 def install_cfengine(module, result):
     version = module.params.get("version")
+    edition = module.params["edition"]
     hub = result["cfengine_role"] == "hub"
-    url, pkg_binaries = get_package_url_for_this_host(module, version, hub)
+    url, pkg_binaries = get_package_url_for_this_host(module, version, hub, edition)
     extension = splitext(url)[1]
 
     result["cfengine_package"] = url
@@ -616,6 +633,8 @@ def run_module():
     module_args = dict(
         policy_server=dict(type='str', required=True),
         version=dict(type='str', required=False),
+        edition=dict(type='str', required=False, default='enterprise',
+                     choices=['enterprise', 'community']),
         # hub=dict(type='bool', required=False, default=False)
     )
 
