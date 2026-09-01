@@ -1,0 +1,45 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install ansible-core
+        run: pip install ansible-core
+
+      - name: Verify galaxy.yml version matches the tag
+        run: |
+          version=$(python3 -c "import yaml; print(yaml.safe_load(open('galaxy.yml'))['version'])")
+          if [ "$version" != "$GITHUB_REF_NAME" ]; then
+            echo "galaxy.yml version ($version) does not match tag ($GITHUB_REF_NAME)" >&2
+            exit 1
+          fi
+
+      - name: Build collection
+        run: ansible-galaxy collection build --output-path dist
+
+      - name: Publish to Ansible Galaxy
+        env:
+          ANSIBLE_GALAXY_API_KEY: ${{ secrets.ANSIBLE_GALAXY_API_KEY }}
+        run: >
+          ansible-galaxy collection publish
+          "dist/cfengine-cfengine-${GITHUB_REF_NAME}.tar.gz"
+          --api-key "$ANSIBLE_GALAXY_API_KEY"
+
+      - name: Attach tarball to GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >
+          gh release create "$GITHUB_REF_NAME"
+          "dist/cfengine-cfengine-${GITHUB_REF_NAME}.tar.gz"
+          --title "$GITHUB_REF_NAME"
+          --generate-notes
